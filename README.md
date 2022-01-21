@@ -72,9 +72,33 @@ SAGA means One Bussiness Transaction
                           |<-----replay success---
                           
 
+                                        AndriodApp/AngualrApp/ReactJSApp....
+                                                ↑↓
+                                            API GateWay <---------------------->  DiscoveryService
+                                    (spring cloud api gateway)              (NetFlix Eureka Discovery Service)
+                                                ↑|                                     ↑|
+                                                ||    Each time a micro-service needs  ||  every tiem a new instacne of the 
+                                                ||           the address of another    ||  micro-service starts, it regsisters
+                                                ||    microservice, it gets from here  ||  here..
+                                                |↓                                     |↓ 
+                            -----------------------------------------------------------------------------
+                            ↑↓                  ↑↓                          ↑↓                          ↑↓        
+        crDB <-> customer-service    orDB <-> order-service  invDB <-> inventory-service  dlvryDb <-> delivery-service
+                            ↑↓                  ↑↓                          ↑↓                          ↑↓
+                            -----------------------------------------------------------------------------
+                            (spring cloud slueth)                                           ↑
+                                    |                                                       |
+                                    |                                               External Config Server 
+                                    |                                            (spring cloud config server)
+                                    |                                                       ↑
+                                    ↓                                                       |
+                     DistributedTracingService                                         FileRepository
+                                 (Zipkin)                                                   custoemr-serivce.properties
+                                                                                            order-service.properties
+                                                                                            .....etc
 
-
-
+                                
+                                           
 
 
 
