@@ -29,3 +29,53 @@ Lab Setup
     Zipkin-Server
     MySQL 8
 
+
+E-Comerce
+--------------------------------------------------------------------
+
+   custDB <--> Consumer Service       <------>
+   ordDB  <--> Orders Service         <------> 
+   invDB  <--> Inventory Service      <------>     ApiGateway  <------------->   Angular/ReactJS/Andriod APP
+   delDB  <--> Delivery Service       <------>
+
+
+SAGA means One Bussiness Transaction
+    eg: Booking an order
+            1. Order Service must gneerate an orderid and insert into OrdersTable
+            2. Inventory Service must update the StocksTable
+            3. Delivery Service must insert into OrderTracingTable with status='PENDING'
+
+        Choreography
+
+            OrderService                        InventoryService        DeliveryService
+                Receives and order from client
+                    ----------req stock update--> attempt the update
+                    <-------successful completion----
+                attemtps inserting orderTable
+                    -------------req tp book delivery----------------------->  atytemtp to insert into OrderTracingTable
+                    <---------------attempts susccessful compeltion-------------
+
+                Receives and order from client
+                    ----------req stock update--> attempt the update
+                    <-------failure status----
+                terminates the operation
+                adn reports the saem to the client
+
+
+        Orchestration
+
+                          | -----Book Order---->  OrderService
+                          |<-----replay success---
+            Orchestrator  | ------update stock--> InventoryService
+                          |<-----replay success---
+                          | ----Book delivery---> DeliveryService
+                          |<-----replay success---
+                          
+
+
+
+
+
+
+
+
