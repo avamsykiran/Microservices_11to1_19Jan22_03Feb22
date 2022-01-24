@@ -98,7 +98,203 @@ SAGA means One Bussiness Transaction
                                                                                             .....etc
 
                                 
-                                           
+BudgetTrackerSystem - Case Study
+-----------------------------------------------------------------------------------------------------
+
+    High Level Requirements
+        1. Account Holder can add/edit his profile
+        2. Add/Edit/Delete his Transactions
+        3. Generate Period Account Statement
+
+    Monolythic Approach
+        com.cts.budget-tracker
+            com.cts.budget-tracker.entities
+                AccountHolder
+                    ahId : Long
+                    firstName : String
+                    lastName : String
+                    emailId : String
+                    mobileNumber : String
+                    txns : Set<Transactions>
+                    currentBal : Double
+
+                TransactionType {CREDIT,DEBIT}
+                
+                Transaction
+                    txnId : Long
+                    header : String
+                    amount : Double
+                    txnType : TransactionType
+                    dateOfTxn: LocalDate
+                    holder : AccountHolder
+                
+            com.cts.budget-tracker.model
+                Statement
+                    holder : AccountHolder
+                    startDate : LocalDate
+                    endDate : LocalDate
+                    txns : Set<Transaction>
+                    totalCredit : double
+                    totalDebit : double
+                    balance : double
+
+            com.cts.budget-tracker.repo
+                AccountHolderRepo
+                TransactionRepo
+            com.cts.budget-tracker.service
+                AccountHolderService
+                TransactionService
+                StatementService
+            com.cts.budget-tracker.exception
+                BudgetTrackerException
+            com.cts.budget-tracker.controller
+                AccountHolderController
+                TransactionController
+                StatementController
+
+BudgetTrackerSystem - Case Study - MicroServices Approach 
+++++---------------------------------------------------------------------------------------------
+   
+   Decompistion Design Pattern (Domain Driven Design and Bounded-context)
+
+        profile-service
+            com.cts.budget-tracker.profile
+                com.cts.budget-tracker.profile.entities
+                     AccountHolder
+                        ahId : Long
+                        firstName : String
+                        lastName : String
+                        emailId : String
+                        mobileNumber : String
+                com.cts.budget-tracker.profile.repo
+                    AccountHolderRepo
+                com.cts.budget-tracker.profile.service
+                    AccountHolderService
+                com.cts.budget-tracker.profile.controller
+                    AccountHolderController
+                com.cts.budget-tracker.profile.exception
+                    ProfileException
+
+        txns-service
+            com.cts.budget-tracker.txns
+                com.cts.budget-tracker.txns.entities
+                    AccountHolder
+                        ahId : Long
+                        txns : Set<Transactions>
+                        currentBal : Double
+
+                    TransactionType {CREDIT,DEBIT}
+                    
+                    Transaction
+                        txnId : Long
+                        header : String
+                        amount : Double
+                        txnType : TransactionType
+                        dateOfTxn: LocalDate
+                        holder : AccountHolder
+
+                com.cts.budget-tracker.txns.repo
+                    AccountHolderRepo
+                    TransactionRepo
+                com.cts.budget-tracker.txns.service
+                    TransactionService
+                com.cts.budget-tracker.txns.controller
+                    TransctionController
+                com.cts.budget-tracker.txns.exception
+                    TransactionException
+
+        statement-service
+             com.cts.budget-tracker.statement
+                com.cts.budget-tracker.statement.models
+                     AccountHolder
+                        ahId : Long
+                        firstName : String
+                        lastName : String
+                        emailId : String
+                        mobileNumber : String
+                        txns : Set<Transactions>
+                        currentBal : Double
+
+                    TransactionType {CREDIT,DEBIT}
+                
+                    Transaction
+                        txnId : Long
+                        header : String
+                        amount : Double
+                        txnType : TransactionType
+                        dateOfTxn: LocalDate
+                        holder : AccountHolder
+
+                    Statement
+                        holder : AccountHolder
+                        startDate : LocalDate
+                        endDate : LocalDate
+                        txns : Set<Transaction>
+                        totalCredit : double
+                        totalDebit : double
+                        balance : double
+
+                com.cts.budget-tracker.statement.service
+                    StatementService
+                com.cts.budget-tracker.statement.controller
+                    StatementController
+                com.cts.budget-tracker.statement.exception
+                    StatementException
+
+    Database Design Pattern (Database per Service)
+
+        profileDB <--------> profile-service
+        txnsDB    <--------> txns-service
+                             statement-service 
+
+    Cross Cutting Design Pattern - Discovery Service Design Pattern
+
+                        discovery-service
+                            |
+                            |
+            -------------------------------------------------
+            |                       |                       |
+            profile-service     txns-service            statement-service
+
+
+    Integration Design Pattern (Api Gateway Design Pattern)
+
+                   discovery-service        gateway-service
+                            |                   |
+                            |                   |
+            -------------------------------------------------
+            |                       |                       |
+            profile-service     txns-service            statement-service
+
+     Cross Cutting Design Pattern - External Config Design Pattern
+
+                discovery-service        gateway-service
+                            |                   |
+                            |                   |
+            -------------------------------------------------
+            |                       |                       |
+            profile-service     txns-service            statement-service
+                        |               |                           |
+                    --------------------------------------------------
+                            |
+                            |
+                        config-service
+
+    Observability Design Pattern - Distributed Tracing
+
+                discovery-service        gateway-service
+                            |                   |
+                            |                   |
+            -------------------------------------------------
+            |                       |                       |
+            profile-service     txns-service            statement-service
+                        |               |                           |
+                    --------------------------------------------------
+                            |                               |
+                            |                               |
+                        config-service                     tracing-service 
+
+   
 
 
 
