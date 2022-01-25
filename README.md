@@ -153,7 +153,7 @@ BudgetTrackerSystem - Case Study
                 StatementController
 
 BudgetTrackerSystem - Case Study - MicroServices Approach 
-++++---------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------
    
    Decompistion Design Pattern (Domain Driven Design and Bounded-context)
 
@@ -294,8 +294,68 @@ BudgetTrackerSystem - Case Study - MicroServices Approach
                             |                               |
                         config-service                     tracing-service 
 
+
+BudgetTrackerSystem - Case Study - MicroServices Approach - implementation
+---------------------------------------------------------------------------------------------
    
+    Step1: Base Micro Services and code the interaction between them
 
+        profile-service
+            spring-boot-starter-web
+            spring-boot-starter-data-jpa
+            spring-cloud-starter-openfeign
+            mysql-connector-java
+            spring-boot-devtools
+        txns-service
+            spring-boot-starter-web
+            spring-boot-starter-data-jpa
+            spring-cloud-starter-openfeign
+            mysql-connector-java
+            spring-boot-devtools
+        statement-service
+            spring-boot-starter-web
+            spring-cloud-starter-openfeign
+            spring-boot-devtools
 
+    Step2: Discovery Service and Load Balancing
 
+        discovery-service
+        profile-service
+        txns-service
+        statement-service
 
+    Step3: Api Gateway
+
+        gateway-service
+        discovery-service
+        profile-service
+        txns-service
+        statement-service
+
+    Step4: Distributed Tracing
+
+        gateway-service
+        discovery-service
+        profile-service
+        txns-service
+        statement-service
+        tracing-service
+
+    Step5: Circuit Breaker 
+    
+        gateway-service
+        discovery-service
+        profile-service
+        txns-service
+        statement-service
+        tracing-service
+
+    Step6: External Configuaration
+    
+        config-service
+        gateway-service
+        discovery-service
+        profile-service
+        txns-service
+        statement-service
+        tracing-service
