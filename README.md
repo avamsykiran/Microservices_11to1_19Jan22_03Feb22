@@ -312,6 +312,8 @@ BudgetTrackerSystem - Case Study - MicroServices Approach - implementation
             spring-cloud-starter-openfeign
             mysql-connector-java
             spring-boot-devtools
+
+            @EnableFiegnClients     on Application class
         statement-service
             spring-boot-starter-web
             spring-cloud-starter-openfeign

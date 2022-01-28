@@ -56,5 +56,11 @@ public class AccountHolder {
 	public void setTransactions(Set<Transaction> transactions) {
 		this.transactions = transactions;
 	}
+
+	@Override
+	public String toString() {
+		return "AccountHolder [ahId=" + ahId + ", currentBalance=" + currentBalance + "]";
+	}
+	
 	
 }

@@ -97,4 +97,12 @@ public class Transaction implements Comparable<Transaction> {
 	public int compareTo(Transaction o) {
 		return this.txnId == null ? 0 : this.txnId.compareTo(o.txnId);
 	}
+
+	@Override
+	public String toString() {
+		return "Transaction [txnId=" + txnId + ", header=" + header + ", amount=" + amount + ", type=" + type
+				+ ", dateOfTransaction=" + dateOfTransaction + ", holder=" + holder + "]";
+	}
+	
+	
 }
