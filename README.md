@@ -314,7 +314,7 @@ BudgetTrackerSystem - Case Study - MicroServices Approach - implementation
             spring-boot-devtools
 
             @EnableFiegnClients     on Application class
-        statement-service
+        statement-service                                   (Aggregator Design Pattern)
             spring-boot-starter-web
             spring-cloud-starter-openfeign
             spring-boot-devtools

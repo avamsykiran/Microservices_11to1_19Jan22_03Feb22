@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cts.budgettracker.txns.entities.AccountHolder;
 import com.cts.budgettracker.txns.entities.Transaction;
 import com.cts.budgettracker.txns.exceptions.TxnsException;
+import com.cts.budgettracker.txns.services.AccountHolderService;
 import com.cts.budgettracker.txns.services.TransactionService;
 
 @RestController
@@ -28,10 +30,19 @@ public class TxnsApi {
 	@Autowired
 	private TransactionService txnService;
 	
+	@Autowired
+	private AccountHolderService ahService;
+	
 	@GetMapping("/holder/{ahId}")
 	public List<Transaction> getAllByAccountHolder(@PathVariable("ahId")Long ahId) throws TxnsException{
 		return txnService.getAllbyAccountHolderId(ahId);
 	}
+	
+	@GetMapping("/holder/{ahId}")
+	public ResponseEntity<AccountHolder> getAccountHolder(@PathVariable("ahId")Long ahId) {
+		AccountHolder ah = ahService.getById(ahId);
+		return new ResponseEntity<AccountHolder>(ah, ah!=null?HttpStatus.OK:HttpStatus.NOT_FOUND);
+	}	
 	
 	@GetMapping("/holder/{ahId}/{start}/{end}")
 	public List<Transaction> getAllByAccountHolder(
