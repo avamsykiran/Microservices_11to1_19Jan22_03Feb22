@@ -312,23 +312,93 @@ BudgetTrackerSystem - Case Study - MicroServices Approach - implementation
             spring-cloud-starter-openfeign
             mysql-connector-java
             spring-boot-devtools
-
             @EnableFiegnClients     on Application class
+
         statement-service                                   (Aggregator Design Pattern)
             spring-boot-starter-web
             spring-cloud-starter-openfeign
             spring-boot-devtools
+             @EnableFiegnClients     on Application class
 
     Step2: Discovery Service and Load Balancing
 
         discovery-service
+            spring-boot-devtools
+            spring-cloud-starter-netflix-eureka-server
+             @EnableEurekaServer    on Application class
+
+            spring.application.name=discovery-service
+            server.port=9000
+
+            eureka.instance.hostname=localhost
+            eureka.client.registerWithEureka=false
+            eureka.client.fetchRegistry=false
+            eureka.client.serviceUrl.defaultZone=http://${eureka.instance.hostname}:${server.port}/eureka/
+            eureka.server.waitTimeInMsWhenSyncEmpty=0
+
         profile-service
+            ++spring-cloud-starter-netflix-eureka-client
+            ++spring-cloud-starter-loadbalancer
+            ++@EnableDiscoveryClient  on Application class
+
+            eureka.client.serviceUrl.defaultZone=http://localhost:9000/eureka/
+            eureka.client.initialInstanceInfoReplicationIntervalSeconds=5
+            eureka.client.registryFetchIntervalSeconds=5
+            eureka.instance.leaseRenewalIntervalInSeconds=5
+            eureka.instance.leaseExpirationDurationInSeconds=5
+
+            spring.cloud.loadbalancer.ribbon.enabled=false
+
         txns-service
+            ++spring-cloud-starter-netflix-eureka-client
+            ++spring-cloud-starter-loadbalancer
+            ++@EnableDiscoveryClient  on Application class
+
+            eureka.client.serviceUrl.defaultZone=http://localhost:9000/eureka/
+            eureka.client.initialInstanceInfoReplicationIntervalSeconds=5
+            eureka.client.registryFetchIntervalSeconds=5
+            eureka.instance.leaseRenewalIntervalInSeconds=5
+            eureka.instance.leaseExpirationDurationInSeconds=5
+
+            spring.cloud.loadbalancer.ribbon.enabled=false
+            
         statement-service
+             ++spring-cloud-starter-netflix-eureka-client
+            ++spring-cloud-starter-loadbalancer
+            ++@EnableDiscoveryClient  on Application class
+
+            eureka.client.serviceUrl.defaultZone=http://localhost:9000/eureka/
+            eureka.client.initialInstanceInfoReplicationIntervalSeconds=5
+            eureka.client.registryFetchIntervalSeconds=5
+            eureka.instance.leaseRenewalIntervalInSeconds=5
+            eureka.instance.leaseExpirationDurationInSeconds=5
+
+            spring.cloud.loadbalancer.ribbon.enabled=false
 
     Step3: Api Gateway
 
         gateway-service
+            spring-boot-devtools
+            Spring Cloud Api Gateway
+            spring-cloud-starter-netflix-eureka-client,
+            spring-cloud-starter-loadbalancer
+            @EnableDiscoveryClient          on Application class
+
+            spring.application.name=gateway-service
+            server.port=9999
+
+            eureka.client.serviceUrl.defaultZone=http://localhost:9000/eureka/
+            eureka.client.initialInstanceInfoReplicationIntervalSeconds=5
+            eureka.client.registryFetchIntervalSeconds=5
+            eureka.instance.leaseRenewalIntervalInSeconds=5
+            eureka.instance.leaseExpirationDurationInSeconds=5
+
+            spring.cloud.gateway.discovery.locator.enabled=true
+            spring.cloud.gateway.discovery.locator.lower-case-service-id=true
+
+            # refer for more configuarable properties 
+            # https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/appendix.html
+
         discovery-service
         profile-service
         txns-service

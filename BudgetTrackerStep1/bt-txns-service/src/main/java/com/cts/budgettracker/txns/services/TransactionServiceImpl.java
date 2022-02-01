@@ -15,7 +15,7 @@ import com.cts.budgettracker.txns.repos.AccountHolderRepo;
 import com.cts.budgettracker.txns.repos.TransactionRepo;
 
 @Service
-public class transactionServiceImpl implements TransactionService {
+public class TransactionServiceImpl implements TransactionService {
 
 	@Autowired
 	private AccountHolderRepo ahRepo;

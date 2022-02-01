@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -19,6 +21,6 @@ public interface TxnsServiceClient {
 	@GetMapping("txns/holder/{ahId}/{start}/{end}")
 	List<Transaction> getTransactions(
 			@PathVariable("ahId") long ahId,
-			@PathVariable("start") LocalDate start,
-			@PathVariable("end") LocalDate end);
+			@PathVariable("start") @DateTimeFormat(iso=ISO.DATE) LocalDate start,
+			@PathVariable("end") @DateTimeFormat(iso=ISO.DATE) LocalDate end);
 }
