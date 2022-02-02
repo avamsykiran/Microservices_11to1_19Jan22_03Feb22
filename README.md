@@ -406,20 +406,61 @@ BudgetTrackerSystem - Case Study - MicroServices Approach - implementation
 
     Step4: Distributed Tracing
 
-        gateway-service
         discovery-service
+        gateway-service
+            ++spring-boot-starter-actuator
+            ++spring-cloud-starter-sleuth
+            ++spring-cloud-starter-zipkin : 2.2.8.RELEASE
+            logger.level.org.springramework.web=debug
+            management.endpoints.web.exposure.include=*
         profile-service
+            ++spring-boot-starter-actuator
+            ++spring-cloud-starter-sleuth
+            ++spring-cloud-starter-zipkin : 2.2.8.RELEASE
+            logger.level.org.springramework.web=debug
+            management.endpoints.web.exposure.include=*
         txns-service
+            ++spring-boot-starter-actuator
+            ++spring-cloud-starter-sleuth
+            ++spring-cloud-starter-zipkin : 2.2.8.RELEASE
+            logger.level.org.springramework.web=debug
+            management.endpoints.web.exposure.include=*
         statement-service
+            ++spring-boot-starter-actuator
+            ++spring-cloud-starter-sleuth
+            ++spring-cloud-starter-zipkin : 2.2.8.RELEASE
+            logger.level.org.springramework.web=debug
+            management.endpoints.web.exposure.include=*
+
         tracing-service
+            zipkin-server
+             https://search.maven.org/remote_content?g=io.zipkin&a=zipkin-server&v=LATEST&c=exec 
+                java -jar zipkin.jar
 
     Step5: Circuit Breaker 
-    
-        gateway-service
         discovery-service
+        gateway-service
         profile-service
         txns-service
+            ++spring-cloud-starter-circuitbreaker-resilience4j
+            
+            resilience4j.circuitbreaker.configs.default.registerHealthIndicator=true
+            resilience4j.circuitbreaker.configs.default.ringBufferSizeInClosedState=4
+            resilience4j.circuitbreaker.configs.default.ringBufferSizeInHalfOpenState=2
+            resilience4j.circuitbreaker.configs.default.automaticTransitionFromOpenToHalfOpenEnabled=true
+            resilience4j.circuitbreaker.configs.default.waitDurationInOpenState= 20s
+            resilience4j.circuitbreaker.configs.default.failureRateThreshold= 50
+            resilience4j.circuitbreaker.configs.default.eventConsumerBufferSize= 10
         statement-service
+            ++spring-cloud-starter-circuitbreaker-resilience4j
+            
+            resilience4j.circuitbreaker.configs.default.registerHealthIndicator=true
+            resilience4j.circuitbreaker.configs.default.ringBufferSizeInClosedState=4
+            resilience4j.circuitbreaker.configs.default.ringBufferSizeInHalfOpenState=2
+            resilience4j.circuitbreaker.configs.default.automaticTransitionFromOpenToHalfOpenEnabled=true
+            resilience4j.circuitbreaker.configs.default.waitDurationInOpenState= 20s
+            resilience4j.circuitbreaker.configs.default.failureRateThreshold= 50
+            resilience4j.circuitbreaker.configs.default.eventConsumerBufferSize= 10            
         tracing-service
 
     Step6: External Configuaration
