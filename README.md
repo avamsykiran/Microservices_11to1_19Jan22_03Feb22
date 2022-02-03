@@ -464,11 +464,79 @@ BudgetTrackerSystem - Case Study - MicroServices Approach - implementation
         tracing-service
 
     Step6: External Configuaration
+
+        inTheWorkSpace> md bt-props-repo
+         //and then create these files in this directory
+            // gateway-service.properties
+            // profile-service.properties
+            // txns-service.properties
+            // statement-service.properties
+            
+        inTheWorkSpace> cd bt-props-repo
+        inTheWorkSpace\bt-props-repo> git init           
+        inTheWorkSpace\bt-props-repo> git add .
+        inTheWorkSpace\bt-props-repo> git commit -m "all service properties"
+        
     
         config-service
-        gateway-service
+            spring-cloud-config-server
+            spring-cloud-starter-netflix-eureka-client
+            spring-boot-devtools
+
+            @EnableDiscoveryClient
+            @EnableConfigServer             on Application class
+
+            spring.application.name=config-service
+            server.port=9090
+
+            spring.cloud.config.server.git.uri=file:///local/git/repo/path
+
+            eureka.client.serviceUrl.defaultZone=http://localhost:9000/eureka/
+            eureka.client.initialInstanceInfoReplicationIntervalSeconds=5
+            eureka.client.registryFetchIntervalSeconds=5
+            eureka.instance.leaseRenewalIntervalInSeconds=5
+            eureka.instance.leaseExpirationDurationInSeconds=5
+
         discovery-service
+
+        gateway-service        
+            ++spring-cloud-starter-bootstrap
+            ++spring-cloud-config-client
+
+            spring.cloud.config.name=gateway-service
+            spring.cloud.config.discovery.service-id=config-service
+            spring.cloud.config.discovery.enabled=true
+            
+            eureka.client.serviceUrl.defaultZone=http://localhost:9000/eureka/
+
         profile-service
+            ++spring-cloud-starter-bootstrap
+            ++spring-cloud-config-client
+
+            spring.cloud.config.name=profile-service
+            spring.cloud.config.discovery.service-id=config-service
+            spring.cloud.config.discovery.enabled=true
+            
+            eureka.client.serviceUrl.defaultZone=http://localhost:9000/eureka/
+
         txns-service
+            ++spring-cloud-starter-bootstrap
+            ++spring-cloud-config-client
+
+            spring.cloud.config.name=txns-service
+            spring.cloud.config.discovery.service-id=config-service
+            spring.cloud.config.discovery.enabled=true
+            
+            eureka.client.serviceUrl.defaultZone=http://localhost:9000/eureka/
+
         statement-service
+            ++spring-cloud-starter-bootstrap
+            ++spring-cloud-config-client
+
+            spring.cloud.config.name=statement-service
+            spring.cloud.config.discovery.service-id=config-service
+            spring.cloud.config.discovery.enabled=true
+            
+            eureka.client.serviceUrl.defaultZone=http://localhost:9000/eureka/
+
         tracing-service
